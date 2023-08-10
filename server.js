@@ -1,3 +1,4 @@
+
 const express = require("express");
 // const cors = require("cors");
 const app = express();
@@ -24,3 +25,4 @@ app.use('/api/auth',userRoute)
 app.listen(4000, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
