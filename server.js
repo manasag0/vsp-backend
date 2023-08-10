@@ -1,1 +1,2 @@
-const express = require('express')
+const express = require('express');
+require('./db/mongoose.js')();
