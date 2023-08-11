@@ -1,50 +1,26 @@
-const express = require('express');
-const router = express.Router()
-const video = require("../Models/video")
-const validate = require("../validate/validation")
+const multer = require('multer');
+const path = require('path');
+const router = require('express').Router();
+const {createNewPost, getAllPost, getPostByUsername, getVideoForStream, getSinglePost} = require('../controllers/video');
 
-router.post("/upload", validate, async (req, res) => {
-    console.log(req.body)
-    try {
-        const data = await new video({ ...req.body, userid: req.userid })
-        await data.save()
-        response.status(200).json({
-            status: "saved successfully"
-        })
 
-    } catch (e) {
-        res.status(400).json({
-            message: e.message
-        })
-    }
-})
+// Set up Multer storage configuration
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Specify the destination folder for storing video files
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname); // Use the original filename for the video file
+  },
+});
+  
+// Create a multer upload instance
+const upload = multer({ storage });
 
-router.get('/home', async (req, res) => {
-    try {
-        const data = await video.find()
-        res.status(200).json(data)
-    } catch (err) {
-        res.json({ message: err.message })
-    }
-})
+router.post("/", upload.single('videoURL'), createNewPost);
+router.get("/", getAllPost);
+router.get("/user/:username", getPostByUsername);
+router.get("/video/:filename", getVideoForStream);
+router.get("/:id", getSinglePost);
 
-router.get('/myvideos', validate, async (req, resp) => {
-    try {
-        const data = await video.find({ userid: req.userid })
-        console.log(data);
-        resp.status(200).json(data)
-    } catch (err) {
-        resp.json({ message: err.message })
-    }
-})
-
-router.delete('/myvideos/:id', async (req, resp) => {
-    try {
-        const data = await video.findByIdAndDelete(req.params.id);
-        resp.status(200).json({ message: 'data deleted succefully' })
-    } catch (err) {
-        resp.json({ message: err.message })
-    }
-})
 module.exports = router;
-

@@ -1,9 +1,10 @@
 
 const express = require("express");
-// const cors = require("cors");
+const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
 const userRoute=require('./routes/auth')
+const videoRoute=require('./routes/video')
 require("dotenv").config();
 
 const PORT = process.env.PORT;
@@ -19,8 +20,9 @@ mongoose
   });
 
 app.use(express.json());
-// app.use(cors());
+app.use(cors());
 app.use('/api/auth',userRoute)
+app.use('/api/videos',videoRoute)
 
 app.listen(4000, () => {
   console.log(`Server is running on port ${PORT}`);
