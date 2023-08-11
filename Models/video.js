@@ -1,6 +1,9 @@
 
 const express = require('express');
+<<<<<<< HEAD
 
+=======
+>>>>>>> daf9970a854c6ab7776e1d28c76fea66f8653fee
 const { default: mongoose } = require("mongoose");
 
 const videoSchema = new mongoose.Schema(
