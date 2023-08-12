@@ -4,7 +4,8 @@ const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
 const userRoute=require('./routes/auth')
-const videoRoute=require('./routes/video')
+const videoRoute=require('./routes/video');
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const PORT = process.env.PORT;
@@ -21,6 +22,7 @@ mongoose
 
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser())
 app.use('/api/auth',userRoute)
 app.use('/api/videos',videoRoute)
 
