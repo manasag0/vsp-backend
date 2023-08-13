@@ -4,22 +4,23 @@ const path = require("path");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const userRegister = async (req, res) => {
-  const { username, email, phone, profession, password, confirmpassword } =
+  const { name, email, phone, profession, password, confirmpassword } =
     req.body;
   try {
     const hash_pass = await bcrypt.hash(req.body.password, 10);
     if (req.body.password !== req.body.confirmpassword) {
-      throw error;
+      throw new Error("Passwords do not match");
     }
+
     const newUser = new User({
-      username,
+      username: name,
       email,
       phone,
       profession,
       password: hash_pass,
     });
     const user = await newUser.save();
-    res.status(200).json(user);
+    res.status(201).json(user);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -40,7 +41,10 @@ const userlogin = async (req, res) => {
     // Token implementation
     const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
     const { password, ...other } = user._doc;
-    res.status(200).json({ token, user: other });
+    res
+      .cookie("access_token", token, { httpOnly: true })
+      .status(200)
+      .json(other);
   } catch (err) {
     res.status(500).json(err);
   }

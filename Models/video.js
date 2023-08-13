@@ -1,5 +1,5 @@
-
 const express = require('express');
+
 
 const { default: mongoose } = require("mongoose");
 
@@ -14,7 +14,7 @@ const videoSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    videoUrl: {
+    videoURL: {
       type: String,
       required: true,
       unique: true,
